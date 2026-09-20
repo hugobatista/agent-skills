@@ -31,7 +31,7 @@ installed agents. Drop `-a opencode -g` to install interactively.
 
 ## Skills
 
-28 skills in 8 categories. The **When to use** column mirrors each skill's
+29 skills in 8 categories. The **When to use** column mirrors each skill's
 trigger description, so you can see when the agent picks it up.
 
 ### python
@@ -86,6 +86,7 @@ trigger description, so you can see when the agent picks it up.
 |---|---|---|
 | `create-readme` | Generate a README from the project structure. | Creating or updating a project README. |
 | `markdown-style` | GFM formatting, structure, headings, and front matter rules. | Writing or editing Markdown documentation. |
+| `ste100` | ASD-STE100 rules for technical writing. Sentence limits, active voice, approved vocabulary. | Writing or editing technical documentation. |
 | `mermaid-syntax` | Mermaid syntax that avoids parser errors across renderers. | Writing or reviewing Mermaid diagrams. |
 | `obsidian-vault` | Read and write structured findings to Obsidian vaults. | Saving findings to, or reading from, a vault. |
 
