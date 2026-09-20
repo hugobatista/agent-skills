@@ -1,6 +1,6 @@
 ---
 name: python-cli
-description: 'Use when building or modifying Python CLI tools. Covers .dockerignore, PyPI publishing, and readme update conventions for Python CLI projects. For CLI tools in other languages, use the dedicated skill for that language. For the Dockerfile template, load the docker skill.'
+description: 'Use when building or modifying Python CLI tools. Covers .dockerignore, PyPI publishing, and readme update conventions for Python CLI projects. For CLI tools in other languages, use the dedicated skill for that language. For the Dockerfile template, load the docker-python skill.'
 author: hugobatista
 ---
 

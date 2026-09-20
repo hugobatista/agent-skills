@@ -1,7 +1,7 @@
 ---
 name: python-ci
 description: >-
-  ALWAYS load alongside the python skill for any new or existing Python project.
+  ALWAYS load alongside the python-project skill for any new or existing Python project.
   Creates GitHub Actions CI workflows for linting (ruff) and testing (pytest + coverage).
   Do not skip — CI is a standard part of Python project setup.
 author: hugobatista

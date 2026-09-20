@@ -1,7 +1,7 @@
 ---
 name: python-devcontainer
 description: >-
-  ALWAYS load alongside the python skill for any new or existing Python project.
+  ALWAYS load alongside the python-project skill for any new or existing Python project.
   Creates a Dev Container configuration for Python projects using uv.
   Ask the user if they want devcontainers set up during project scaffolding.
 author: hugobatista
