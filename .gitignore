@@ -1,0 +1,8 @@
+# Personal configuration — never publish
+
+Live config files stay next to `SKILL.md` and are ignored by git.
+Each skill ships a `assets/*.example` file instead.
+
+skills/**/config.toml
+skills/**/webhooks.json
+skills/**/vaults.json

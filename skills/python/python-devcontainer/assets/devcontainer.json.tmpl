@@ -1,0 +1,13 @@
+// For format details, see https://aka.ms/devcontainer.json. For config options, see the
+// README at: https://github.com/devcontainers/templates/tree/main/src/python
+{
+    "name": "Python {{python_version}}",
+    "image": "mcr.microsoft.com/devcontainers/python:2-{{python_version}}-trixie@sha256:{{python_image_digest}}",
+    "features": {
+        "ghcr.io/devcontainers-extra/features/uv:1": {
+            "version": "{{uv_version}}"
+        }
+    },
+    "runArgs": ["--security-opt", "label=disable"],
+    "postCreateCommand": "{{post_create_command}}"
+}

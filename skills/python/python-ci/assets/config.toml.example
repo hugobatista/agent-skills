@@ -1,0 +1,3 @@
+# Copy to config.toml and set your personal defaults
+github_owner = "your-github-username"
+github_url_base = "go.<owner>.com/gh"

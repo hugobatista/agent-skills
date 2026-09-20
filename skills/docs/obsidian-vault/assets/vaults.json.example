@@ -1,0 +1,5 @@
+{
+  "vaults": {
+    "name": "/absolute/path/to/obsidian/vault"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "webhooks": {
+    "default": "",
+    "alerts": "",
+    "logs": ""
+  }
+}
