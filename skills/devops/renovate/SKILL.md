@@ -12,7 +12,7 @@ Use Renovate for supply-chain hardened dependency management — action SHA pinn
 
 Read `assets/renovate.json.tmpl`, replace `<timezone>` with your IANA timezone (e.g. `"Europe/Lisbon"`), and write it to the project root as `renovate.json`.
 
-Read `config.toml` from this directory. If it exists, extract `renovate_git_author` and `renovate_timezone` for defaults. If not, ask the user for their git author identity and timezone, and write both values to `config.toml` (one-time setup).
+Read `config.toml` from the skill's config directory (`~/.config/opencode/skills-config/renovate/` if it exists, otherwise the skill directory). If it exists, extract `renovate_git_author` and `renovate_timezone` for defaults. If not, ask the user for their git author identity and timezone, and write both values to `config.toml` (one-time setup).
 
 Before creating the config, ask the user for the **git author identity** for Renovate commits. Default: `<renovate_git_author from config>`. This email must be verified on the user's GitHub account to avoid "Unverified" commit badges. Replace `<git-author>` with the chosen value (e.g. `"Renovate Bot <bot@example.com>"`).
 
