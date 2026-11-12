@@ -1,2 +1,3 @@
 # Copy to config.toml and set your personal defaults
 renovate_git_author = "Your Name <your@users.noreply.github.com>"
+renovate_timezone = "Europe/Lisbon"
