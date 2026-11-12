@@ -19,11 +19,11 @@ Before creating the config, ask the user for the **git author identity** for Ren
 Key settings:
 
 - `pinDigests: true` — converts `@v4` → `@<sha> # v4` for actions and `image:tag` → `image:tag@sha256:digest` for Docker. Keeps digests pinned and auto-updated.
-- `minimumReleaseAge: "30 days"` — prevents brand-new releases from being proposed until a vetting window passes.
+- `minimumReleaseAge: "30 days"` — prevents brand-new releases from being proposed until a vetting window passes. The template also sets `prCreation: "not-pending"`, `internalChecksFilter: "strict"`, and `internalChecksAsSuccess: true` so no PR is created until the age check is green.
 - `osvVulnerabilityAlerts: true` — monitors OSV.dev for known CVEs.
 - `dependencyDashboard: true` — creates a visibility issue tracking all pending, blocked, and ignored updates.
 - `lockFileMaintenance.enabled: true` — refreshes transitive dependencies. Do **not** add a narrow schedule unless you have verified that the workflow actually runs inside that window.
-- `packageRules` — major updates get a `major-update` label, security updates get priority, and digest/pinDigest updates keep the 30-day gate.
+- `packageRules` — major updates get a `major-update` label, security updates get priority and bypass the age gate, and digest/pinDigest updates keep the 30-day gate.
 
 ### Labels
 
@@ -224,6 +224,57 @@ Prefer:
 
 The workflow cadence now controls frequency: daily workflow means daily lockfile check, weekly workflow means weekly. Renovate only opens a PR when the lockfile actually changes. If you need a weekly cadence, change the workflow cron (e.g. `0 4 * * 1`) instead of adding a narrow Renovate schedule.
 
+## Enforcing minimumReleaseAge before PR creation
+
+By default Renovate creates the PR immediately and adds a **pending** `renovate/stability-days` check when a release is younger than `minimumReleaseAge`. If that check is not required by branch protection, the PR can be merged before the vetting window ends.
+
+Do **not** make `renovate/stability-days` a required status check: it only exists on Renovate PRs, so human PRs would be blocked forever.
+
+Use the Renovate-side gate instead:
+
+```json
+"prCreation": "not-pending",
+"internalChecksFilter": "strict",
+"internalChecksAsSuccess": true
+```
+
+| Option | Effect |
+|---|---|
+| `internalChecksFilter: "strict"` | Pending releases are filtered out; no PR is proposed until a non-pending version exists |
+| `prCreation: "not-pending"` | The PR is only created once the internal checks are no longer pending |
+| `internalChecksAsSuccess: true` | A green internal check counts as success, so PR creation does not stall when bare Renovate branches have no external checks |
+
+`internalChecksAsSuccess` is important when `lint`/`test` only run on `pull_request`: branches pushed by Renovate have no external checks, and `not-pending` would otherwise fall back to `prNotPendingHours` (25 hours) or stall after every rebase.
+
+With this gate, recent updates stay in the Dependency Dashboard without a PR. When the release passes `minimumReleaseAge`, Renovate creates the PR on a later run.
+
+### Security updates
+
+Strict filtering also suppresses security updates to versions younger than 30 days. Bypass the age gate for security updates by adding this to the security package rule:
+
+```json
+"minimumReleaseAge": null
+```
+
+Security PRs are then created immediately and remain gated by review.
+
+### Keep a package in its own group
+
+If a package requires Dependency Dashboard approval (for example a GHCR image without release timestamps), give it its own `groupName`. Otherwise its approval blocks the whole non-major group:
+
+```json
+{
+  "matchDatasources": ["docker"],
+  "matchPackageNames": ["ghcr.io/your-org/your-image"],
+  "matchUpdateTypes": ["major", "minor", "patch"],
+  "minimumReleaseAgeBehaviour": "timestamp-optional",
+  "dependencyDashboardApproval": true,
+  "groupName": "your-image"
+}
+```
+
+Place this rule after the global `minor`/`patch` group rule; the later `groupName` overrides the group for that package.
+
 ## uv image and `required-version`
 
 If the project pins `[tool.uv] required-version` to an exact version and the Dockerfile uses `ghcr.io/astral-sh/uv:<same>@sha256:...`, Renovate must not bump the image tag without also updating `pyproject.toml`. A bare version is treated as exact (`0.11.18` means `==0.11.18`), so the build fails with:
@@ -312,6 +363,10 @@ Replace `owner/repo` with your repository path and `<token>` with a PAT that has
 ## Troubleshooting
 
 - **Dependency Dashboard shows "Awaiting Schedule" forever:** the Renovate schedule does not overlap with the workflow run time. Remove the narrow schedule or widen it.
+- **No PR for a recent update:** expected with `internalChecksFilter: "strict"`. The update stays in the Dependency Dashboard until it passes `minimumReleaseAge`.
+- **PR creation stalls with `prCreation: "not-pending"`:** add `internalChecksAsSuccess: true` when CI only runs on `pull_request`.
+- **Security update is not proposed:** strict filtering is holding it for 30 days. Add `minimumReleaseAge: null` to the security package rule.
+- **One package blocks a whole group:** give that package its own `groupName`, after the global grouping rule.
 - **No PR for a GHCR digest update:** GHCR has no release timestamp. Use `minimumReleaseAgeBehaviour: "timestamp-optional"` or `minimumReleaseAge: null` for that package.
 - **Renovate cannot update workflow files:** the PAT is missing `Workflows: Read and write`.
 - **Renovate fails to add labels:** create the labels in the repository first.
