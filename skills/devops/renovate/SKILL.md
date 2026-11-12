@@ -307,7 +307,7 @@ forgejo-runner exec \
   -s RENOVATE_TOKEN=<token>
 ```
 
-Replace `owner/repo` with your repository path and `<token>` with a GitHub/Forgejo PAT with `repo` and `workflow` scopes.
+Replace `owner/repo` with your repository path and `<token>` with a PAT that has repository write access (on GitHub, include the `workflow` scope).
 
 ## Troubleshooting
 
