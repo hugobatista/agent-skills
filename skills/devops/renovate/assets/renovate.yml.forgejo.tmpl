@@ -12,10 +12,9 @@ on:
   schedule:
     - cron: '0 4 * * *'
 
-permissions:
-  contents: write
-  pull-requests: write
-  issues: write
+# Forgejo ignores the `permissions` key. The token scopes are configured
+# on the Forgejo instance, so make sure RENOVATE_TOKEN has write access to
+# contents, pull requests, and issues.
 
 concurrency:
   group: ${{ forgejo.workflow }}-${{ forgejo.ref }}
@@ -27,9 +26,11 @@ jobs:
 
     runs-on: <runner-label>
 
+    timeout-minutes: 15
+
     steps:
       - name: Checkout code
-        uses: https://data.forgejo.org/actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        uses: https://data.forgejo.org/actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
         with:
           fetch-depth: 1
 
@@ -50,7 +51,7 @@ jobs:
           fi
 
       - name: Run Renovate
-        uses: docker://ghcr.io/renovatebot/renovate:43.169.4@sha256:4c84638a2b70b2fe2c3bbf87d25e6f8aba40d83f8ca2b7c0bd3d0f1a4591ef7b
+        uses: docker://ghcr.io/renovatebot/renovate:44.151.0@sha256:8a79148ec24cc05809782e20e720dafe9dde0c24a00f26e76d14dec2cbd74a53
         env:
           RENOVATE_CONFIG_FILE: renovate.json
           RENOVATE_ENDPOINT: https://<forgejo-instance>/api/v1/

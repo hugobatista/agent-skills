@@ -55,7 +55,7 @@ trigger description, so you can see when the agent picks it up.
 
 | Skill | What it does | When to use |
 |---|---|---|
-| `renovate` | Renovate configuration for GitHub and Forgejo. Pinned actions, 30-day minimum release age. | Adding or changing automated dependency updates. |
+| `renovate` | Renovate configuration for GitHub and Forgejo. Pinned actions and Docker digests, 30-day minimum release age, GHCR timestamp caveats. | Adding or changing automated dependency updates. |
 | `github-templates` | Issue and PR templates, plus `CONTRIBUTING.md`. | Initialising a GitHub project or adding templates. |
 | `node-ci` | GitHub Actions CI for Node.js and Bun. Typecheck, tests, draft releases, npm publish via OIDC. | Setting up CI for a Node or Bun project. |
 

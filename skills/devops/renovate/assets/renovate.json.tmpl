@@ -14,10 +14,7 @@
   "prHourlyLimit": 2,
   "prConcurrentLimit": 10,
   "lockFileMaintenance": {
-    "enabled": true,
-    "schedule": [
-      "before 4am on monday"
-    ]
+    "enabled": true
   },
   "packageRules": [
     {
@@ -28,6 +25,22 @@
       "groupName": "non-major dependency updates"
     },
     {
+      "matchUpdateTypes": [
+        "major"
+      ],
+      "labels": [
+        "dependencies",
+        "major-update"
+      ]
+    },
+    {
+      "matchUpdateTypes": [
+        "digest",
+        "pinDigest"
+      ],
+      "minimumReleaseAge": "30 days"
+    },
+    {
       "matchCategories": [
         "security"
       ],
@@ -36,7 +49,8 @@
         "security"
       ],
       "prPriority": 10,
-      "groupName": "security updates"
+      "groupName": "security updates",
+      "dependencyDashboardApproval": false
     }
   ]
 }
